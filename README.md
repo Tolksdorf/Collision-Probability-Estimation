@@ -1,7 +1,7 @@
 # Collision-Probaility-Estimation
 Dependencies:  
--Eigen  
--CasaDi  
+-[Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page),
+-CasADi, build from source, see [here](https://github.com/casadi/casadi/wiki/InstallationLinux).  
 
 After installing CasaDi, configure the library path as: 
 ```
@@ -15,3 +15,4 @@ Test the probability of collision estimation with the testbench:
 ```
 ./testbench.out
 ```
+For documentation please see our paper on arxiv.
