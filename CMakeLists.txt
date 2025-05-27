@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
-# set(CMAKE_C_COMPILER "gcc-11.4.0")
-# set(CMAKE_CXX_COMPILER "/usr/bin/g++-7.5")
 
 project(_poc_function)
+
+find_package(casadi REQUIRED)
+find_package (Eigen3 REQUIRED NO_MODULE)
 
 set(${PROJECT_NAME}.out CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,16 +21,14 @@ include_directories(include)
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-    casadi)
+    casadi
+    Eigen3::Eigen)
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 add_executable(testbench.out testbench.cpp)
 
-target_link_libraries(testbench.out ${PROJECT_NAME})
-
-#uncomment if the testbenach does have additional header files
-#target_include_directories(testbench.out PRIVATE include)
+target_link_libraries(testbench.out ${PROJECT_NAME} casadi Eigen3::Eigen)
 
 set_target_properties(testbench.out PROPERTIES 
     BUILD_RPATH $ORIGIN
