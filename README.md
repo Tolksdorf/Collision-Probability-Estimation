@@ -1,4 +1,5 @@
 # Collision-Probability-Estimation
+Tested with Ubuntu 22.04, gcc 12.1.0, and cmake 3.30.5.
 Dependencies:  
 - [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page)
 
