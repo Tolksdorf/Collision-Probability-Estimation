@@ -1,4 +1,6 @@
 # Collision-Probaility-Estimation
-Dependencies: 
--Eigen
--CasaDi
+Dependencies:\ 
+-Eigen\
+-CasaDi\
+
+After installing CasaDi, 
