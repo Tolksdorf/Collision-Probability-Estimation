@@ -1,6 +1,9 @@
 # Collision-Probability-Estimation
 Dependencies:  
 - [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page),
+  ```
+  sudo apt install -y libeigen3-dev
+  ```
 - CasADi, built from source, see [here](https://github.com/casadi/casadi/wiki/InstallationLinux).  
 
 After installing CasaDi, configure the library path as: 
