@@ -15,4 +15,4 @@ Test the probability of collision estimation with the testbench:
 ```
 ./testbench.out
 ```
-For documentation, please see our paper on arxiv.
+For documentation, please see our paper on arXiv.
