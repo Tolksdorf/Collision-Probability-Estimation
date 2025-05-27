@@ -5,7 +5,8 @@ Dependencies:
 
 After installing CasaDi, configure the library path as: 
 ```
-echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/" >> $HOME/.bashrc && \
+source $HOME/.bashrc
 ```
 The package is ready to be built, so go to the directory where this repo is located and run:
 ```
