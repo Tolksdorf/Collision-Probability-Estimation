@@ -1,7 +1,7 @@
 # Collision-Probaility-Estimation
 Dependencies:  
--[Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page),
--CasADi, build from source, see [here](https://github.com/casadi/casadi/wiki/InstallationLinux).  
+- [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page),
+- CasADi, build from source, see [here](https://github.com/casadi/casadi/wiki/InstallationLinux).  
 
 After installing CasaDi, configure the library path as: 
 ```
