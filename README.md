@@ -30,4 +30,4 @@ For documentation, please see our paper on [arXiv](https://arxiv.org/abs/2505.21
   journal={arXiv preprint arXiv:2505.21161}  [Titel anhand dieser ArXiv-ID in Citavi-Projekt übernehmen] ,
   year={2025}
 }
-´´´
+```
