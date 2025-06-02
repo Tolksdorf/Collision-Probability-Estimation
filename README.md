@@ -24,10 +24,10 @@ Test the probability of collision estimation with the testbench:
 For documentation, please see our paper on [arXiv](https://arxiv.org/abs/2505.21161). Cite it as:
 
 ```
-@article{tolksdorf2025collision,
-  title={Collision Probability Estimation for Optimization-based Vehicular Motion Planning},
-  author={Tolksdorf, Leon and Tejada, Arturo and Birkner, Christian and van de Wouw, Nathan},
-  journal={arXiv preprint arXiv:2505.21161}  [Titel anhand dieser ArXiv-ID in Citavi-Projekt übernehmen] ,
-  year={2025}
+@article{CollisionProbabilityEstimation,
+  title = {Collision Probability Estimation for Optimization-based Vehicular Motion Planning},
+  author = {Tolksdorf, Leon and Tejada, Arturo and Birkner, Christian and van de Wouw, Nathan},
+  journal = {arXiv preprint arXiv:2505.21161} ,
+  year = {2025}
 }
 ```
