@@ -23,7 +23,7 @@ void POCFunction::_collision_angle_intervals(VectorXd* r, VectorXd* phi){
         VectorXd phi_d(x_o.size());
         for (int i = 0; i < x_o.size(); ++i) {
             phi_d(i) = atan2(y_o(i), x_o(i) - L_cir_e);             // atan2(y_o, x_o - L_cir_e) Eigen does not support atan2
-            phi_d(i) = fmod(phi_d(i) + 2 * M_PI, 2 * M_PI);         // Modulo 2 * M_PI, + 2 * M_PI to avoid negative numbers
+            phi_d(i) = fmod(phi_d(i) + 2 * M_PI, 2 * M_PI);         // Modulo 2 * M_PI, + 2 * M_PI to avoid negative numbers test
         }
 
         int cir_o_r = paras.n_cir_o;
