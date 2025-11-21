@@ -1,3 +1,14 @@
+/*
+Written by Leon Tolksdorf, 2025. Please refer to: 
+
+@article{CollisionProbabilityEstimation,
+  title   = {Collision Probability Estimation for Optimization-based Vehicular Motion Planning},
+  author  = {Tolksdorf, Leon and Tejada, Arturo and Birkner, Christian and van de Wouw, Nathan},
+  journal = {arXiv preprint arXiv:2505.21161} ,
+  year    = {2025}
+}
+*/
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <iostream>
@@ -33,17 +44,17 @@ SX POCFunction::_trapezoidal_2Dintegral(SX vector){
     SX integral_value = 0;
     int r_phi_count = 0;
 
-    for(int i_phi = 0; i_phi < paras.Nbr_samples_dim; ++i_phi)
+    for(int i_phi = 0; i_phi < _paras.Nbr_samples_dim; ++i_phi)
     {
-        for(int j_r = 0; j_r < paras.Nbr_samples_dim; ++j_r)
+        for(int j_r = 0; j_r < _paras.Nbr_samples_dim; ++j_r)
         {
             val = vector(r_phi_count);
             // note: for a 2D gird, all four corners are weighted by 1/4 (see first for if statements). The sides of the grid, excluding the corners, 
             // are weighted by 1/2 (see next four if statements). All remaining points are weighted by 1 (no if statements required).
-            if(i_phi == 0 || i_phi == (paras.Nbr_samples_dim - 1)){
+            if(i_phi == 0 || i_phi == (_paras.Nbr_samples_dim - 1)){
                 val *= 0.5;
             }
-            if(j_r == 0 || j_r == (paras.Nbr_samples_dim - 1)){
+            if(j_r == 0 || j_r == (_paras.Nbr_samples_dim - 1)){
                 val *= 0.5;
             }
             integral_value += val;
@@ -55,14 +66,14 @@ SX POCFunction::_trapezoidal_2Dintegral(SX vector){
 
 
 SX POCFunction::_Simpson_2Dintegral(SX vector){
-    SX val = SX::zeros(paras.Nbr_samples_dim,1);
+    SX val = SX::zeros(_paras.Nbr_samples_dim,1);
     SX integral_value = 0;
     int r_phi_count = 0;
-    for (int i_phi = 0; i_phi < paras.Nbr_samples_dim; i_phi++){
+    for (int i_phi = 0; i_phi < _paras.Nbr_samples_dim; i_phi++){
 
-        for(int j_r = 0; j_r < paras.Nbr_samples_dim; j_r++){
+        for(int j_r = 0; j_r < _paras.Nbr_samples_dim; j_r++){
 
-            if (j_r == 0 || j_r == paras.Nbr_samples_dim - 1){
+            if (j_r == 0 || j_r == _paras.Nbr_samples_dim - 1){
                 val(i_phi) +=  vector(r_phi_count);
             } else if (j_r % 2 == 0){
                 val(i_phi) += 2 * vector(r_phi_count);
@@ -72,7 +83,7 @@ SX POCFunction::_Simpson_2Dintegral(SX vector){
             r_phi_count++;
         }
         val(i_phi) = val(i_phi) * _h_r / 3.0;
-        if(i_phi == 0 || i_phi == paras.Nbr_samples_dim - 1){
+        if(i_phi == 0 || i_phi == _paras.Nbr_samples_dim - 1){
             integral_value += val(i_phi);
 
         } else if (i_phi % 2 == 0){
@@ -85,36 +96,36 @@ SX POCFunction::_Simpson_2Dintegral(SX vector){
     return integral_value * _h_phi / 3.0;
 }
 
-void POCFunction::_get_distances(double L_e, double L_o, int n_cir_e, int n_cir_o, std::vector<double>* dists_e, std::vector<double>* dists_o) {
+void POCFunction::_get_distances(double d_ce, double d_co, int N_ce, int N_co, std::vector<double>* dists_e, std::vector<double>* dists_o) {
 	
-    (*dists_o).resize(n_cir_o, 0.0);  //object distances of each circle of the center in local coordinates
-    (*dists_e).resize(n_cir_e, 0.0);  //ego distances of each circle of the center in local coordinates
+    (*dists_o).resize(N_co, 0.0);  //object distances of each circle of the center in local coordinates
+    (*dists_e).resize(N_ce, 0.0);  //ego distances of each circle of the center in local coordinates
 
     //calculate ego distances
-    if (n_cir_e % 2 == 0) {  //if even
-        for (int i_ee = 0; i_ee < n_cir_e / 2; ++i_ee) {
-            (*dists_e)[i_ee] = -(L_e / 2.0 + (n_cir_e / 2.0 - i_ee - 1.0) * L_e);
-            (*dists_e)[n_cir_e - 1 - i_ee] = L_e / 2.0 + (n_cir_e / 2.0 - i_ee - 1.0) * L_e;
+    if (N_ce % 2 == 0) {  //if even
+        for (int i_ee = 0; i_ee < N_ce / 2; ++i_ee) {
+            (*dists_e)[i_ee] = -(d_ce / 2.0 + (N_ce / 2.0 - i_ee - 1.0) * d_ce);
+            (*dists_e)[N_ce - 1 - i_ee] = d_ce / 2.0 + (N_ce / 2.0 - i_ee - 1.0) * d_ce;
         }
     }
     else {  //if odd
-        for (int i_ee = 0; i_ee < (n_cir_e - 1) / 2; ++i_ee) {
-            (*dists_e)[i_ee] = -(L_e + ((n_cir_e - 1.0) / 2.0 - i_ee - 1.0) * L_e);
-            (*dists_e)[n_cir_e - 1 - i_ee] = L_e + ((n_cir_e - 1.0) / 2.0 - i_ee - 1.0) * L_e;
+        for (int i_ee = 0; i_ee < (N_ce - 1) / 2; ++i_ee) {
+            (*dists_e)[i_ee] = -(d_ce + ((N_ce - 1.0) / 2.0 - i_ee - 1.0) * d_ce);
+            (*dists_e)[N_ce - 1 - i_ee] = d_ce + ((N_ce - 1.0) / 2.0 - i_ee - 1.0) * d_ce;
         }
     }
 
     //calculate object distances
-    if (n_cir_o % 2 == 0) {  //if even
-        for (int i_oo = 0; i_oo < n_cir_o / 2; ++i_oo) {
-            (*dists_o)[i_oo] = -(L_o / 2.0 + (n_cir_o / 2.0 - i_oo - 1.0) * L_o);
-            (*dists_o)[n_cir_o - 1 - i_oo] = L_o / 2.0 + (n_cir_o / 2.0 - i_oo - 1.0) * L_o;
+    if (N_co % 2 == 0) {  //if even
+        for (int i_oo = 0; i_oo < N_co / 2; ++i_oo) {
+            (*dists_o)[i_oo] = -(d_co / 2.0 + (N_co / 2.0 - i_oo - 1.0) * d_co);
+            (*dists_o)[N_co - 1 - i_oo] = d_co / 2.0 + (N_co / 2.0 - i_oo - 1.0) * d_co;
         }
     }
     else {  //if odd
-        for (int i_oo = 0; i_oo < (n_cir_o - 1) / 2; ++i_oo) {
-            (*dists_o)[i_oo] = -(L_o + ((n_cir_o - 1.0) / 2.0 - i_oo - 1.0) * L_o);
-            (*dists_o)[n_cir_o - 1 - i_oo] = L_o + ((n_cir_o - 1.0) / 2.0 - i_oo - 1.0) * L_o;
+        for (int i_oo = 0; i_oo < (N_co - 1) / 2; ++i_oo) {
+            (*dists_o)[i_oo] = -(d_co + ((N_co - 1.0) / 2.0 - i_oo - 1.0) * d_co);
+            (*dists_o)[N_co - 1 - i_oo] = d_co + ((N_co - 1.0) / 2.0 - i_oo - 1.0) * d_co;
         }
     }
 }

@@ -1,3 +1,14 @@
+/*
+Written by Leon Tolksdorf, 2025. Please refer to: 
+
+@article{CollisionProbabilityEstimation,
+  title   = {Collision Probability Estimation for Optimization-based Vehicular Motion Planning},
+  author  = {Tolksdorf, Leon and Tejada, Arturo and Birkner, Christian and van de Wouw, Nathan},
+  journal = {arXiv preprint arXiv:2505.21161} ,
+  year    = {2025}
+}
+*/
+
 #include <iostream>
 #include <eigen3/Eigen/Dense>
 #include <casadi/casadi.hpp>
@@ -9,29 +20,28 @@ using namespace casadi;
 
 POCFunction::POCFunction(){
     //constructor
-    poc_parameter_values(&paras);
-    _n_rows = paras.Nbr_samples_dim * paras.Nbr_samples_dim;
+    poc_parameter_values(&_paras);
+    _n_rows = _paras.Nbr_samples_dim * _paras.Nbr_samples_dim;
 
     //determine twice the number of collision angle intervals
-    if (paras.n_cir_o % 2 == 0) {_n_cols = paras.n_cir_o/2 * 4 * paras.n_cir_e;
-    } else {_n_cols = (paras.n_cir_o + 1)/2 * 4 * paras.n_cir_e;}
+    _n_cols = 2 * _paras.N_ce * _paras.N_co;
 
     //initialize the integration ranges
     double r_lb = 0;
-    double r_ub = paras.R + paras.L_o/2 + (paras.n_cir_o/2 - 1) * paras.L_o + (paras.n_cir_e - 1)/2 * paras.L_e; 
+    double r_ub = _paras.R + _paras.d_ce/2 * (_paras.N_co - 1) + _paras.d_ce/2 * (_paras.N_ce - 1); 
     double phi_lb = 0;
     double phi_ub = 2 * M_PI;
-    VectorXd segment = VectorXd::Ones(paras.Nbr_samples_dim);
-    VectorXd r_single_range   = VectorXd::LinSpaced(paras.Nbr_samples_dim, r_lb, r_ub);
-    VectorXd phi_single_range = VectorXd::LinSpaced(paras.Nbr_samples_dim, phi_lb, phi_ub);
+    VectorXd segment = VectorXd::Ones(_paras.Nbr_samples_dim);
+    VectorXd r_single_range   = VectorXd::LinSpaced(_paras.Nbr_samples_dim, r_lb, r_ub);
+    VectorXd phi_single_range = VectorXd::LinSpaced(_paras.Nbr_samples_dim, phi_lb, phi_ub);
     _r_range   = VectorXd::Zero(_n_rows);
     _phi_range = VectorXd::Zero(_n_rows);
     _h_r   = r_single_range(1) - r_single_range(0);
     _h_phi = phi_single_range(1) - phi_single_range(0);
 
-    for (int k = 0; k < paras.Nbr_samples_dim; k++){
-        _r_range.segment(k*paras.Nbr_samples_dim, paras.Nbr_samples_dim) << segment * r_single_range(k);
-        _phi_range.segment(k*paras.Nbr_samples_dim, paras.Nbr_samples_dim) <<  phi_single_range;
+    for (int k = 0; k < _paras.Nbr_samples_dim; k++){
+        _r_range.segment(k*_paras.Nbr_samples_dim, _paras.Nbr_samples_dim) << segment * r_single_range(k);
+        _phi_range.segment(k*_paras.Nbr_samples_dim, _paras.Nbr_samples_dim) <<  phi_single_range;
     }
 
     //get collision angle intervals

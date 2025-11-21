@@ -1,3 +1,12 @@
+# Written by Leon Tolksdorf, 2025. Please refer to: 
+
+# @article{CollisionProbabilityEstimation,
+#   title   = {Collision Probability Estimation for Optimization-based Vehicular Motion Planning},
+#   author  = {Tolksdorf, Leon and Tejada, Arturo and Birkner, Christian and van de Wouw, Nathan},
+#   journal = {arXiv preprint arXiv:2505.21161} ,
+#   year    = {2025}
+# }
+
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 project(_poc_function)

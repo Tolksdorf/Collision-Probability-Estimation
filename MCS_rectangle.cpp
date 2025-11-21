@@ -1,3 +1,14 @@
+/*
+Written by Leon Tolksdorf, 2025. Please refer to: 
+
+@article{CollisionProbabilityEstimation,
+  title   = {Collision Probability Estimation for Optimization-based Vehicular Motion Planning},
+  author  = {Tolksdorf, Leon and Tejada, Arturo and Birkner, Christian and van de Wouw, Nathan},
+  journal = {arXiv preprint arXiv:2505.21161} ,
+  year    = {2025}
+}
+*/
+
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -37,7 +48,7 @@ MatrixXd get_rectangle_corners(Vector3d states, double length, double width) {
     return closed_corners;
 }
 
-bool CheckSide(const MatrixXd& rect1, const MatrixXd& rect2, Vector2d edgeNormal, Vector2d edgePoint) {
+bool check_side(const MatrixXd& rect1, const MatrixXd& rect2, Vector2d edgeNormal, Vector2d edgePoint) {
     VectorXd projections1 = (rect1.rowwise() - edgePoint.transpose()) * edgeNormal;
     VectorXd projections2 = (rect2.rowwise() - edgePoint.transpose()) * edgeNormal;
 
@@ -47,31 +58,31 @@ bool CheckSide(const MatrixXd& rect1, const MatrixXd& rect2, Vector2d edgeNormal
 bool RectIntersect(const MatrixXd& rect1, const MatrixXd& rect2) {
     for (int j = 0; j < 4; ++j) {
         Vector2d edge = rect1.row((j + 1) % 4) - rect1.row(j);
-        Vector2d edgeNormal(-edge.y(), edge.x());  // Perpendicular vector
+        Vector2d edgeNormal(-edge.y(), edge.x());  //perpendicular vector
 
-        if (!CheckSide(rect1, rect2, edgeNormal, rect1.row(j).transpose())) return false;
+        if (!check_side(rect1, rect2, edgeNormal, rect1.row(j).transpose())) return false;
     }
     for (int j = 0; j < 4; ++j) {
         Vector2d edge = rect2.row((j + 1) % 4) - rect2.row(j);
         Vector2d edgeNormal(-edge.y(), edge.x());
 
-        if (!CheckSide(rect1, rect2, edgeNormal, rect2.row(j).transpose())) return false;
+        if (!check_side(rect1, rect2, edgeNormal, rect2.row(j).transpose())) return false;
     }
     return true;
 }
 
-bool rect_intersect(Vector3d states_e, Vector3d states_o, double length_e, double width_e, double length_o, double width_o) {
+bool rect_intersect(Vector3d states_o, double length_e, double width_e, double length_o, double width_o) {
+    Vector3d states_e = {0, 0, 0};
     MatrixXd rect_e = get_rectangle_corners(states_e, length_e, width_e);
     MatrixXd rect_o = get_rectangle_corners(states_o, length_o, width_o);
     return RectIntersect(rect_e, rect_o);
 }
-double MCS_rectangle(Vector3d sigma_o, Vector3d y_e, Vector3d y_o, Vector2d dim_e, Vector2d dim_o, int N) {
+double MCS_rectangle(Vector3d sigma_o, Vector3d y_o, Vector2d dim_e, Vector2d dim_o, int N) {
     int P_rect = 0;
 
     for (int j = 0; j < N; ++j) {
         Vector3d r_o(normrnd(y_o(0), sigma_o(0)), normrnd(y_o(1), sigma_o(1)), normrnd(y_o(2), sigma_o(2)));
-        Vector3d test = {0,0,0};
-        if (rect_intersect(y_e, r_o, dim_e(0), dim_e(1), dim_o(0), dim_o(1))) {
+        if (rect_intersect(r_o, dim_e(0), dim_e(1), dim_o(0), dim_o(1))) {
             P_rect++;
         }
     }
