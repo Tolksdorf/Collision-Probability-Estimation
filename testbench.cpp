@@ -49,11 +49,11 @@ double random_double(double min_val, double max_val) {
         return dist(gen);
     }
 
-void save_vectors_CSV(const vector<double>& col1, const std::string& filename) {
+void save_vectors_CSV(const vector<double>& col1, const string& filename) {
 
-    std::ofstream file(filename);  //open the file for writing
+    ofstream file(filename);  //open the file for writing
     if (!file) {
-        std::cerr << "Error opening file!" << std::endl;
+        cerr << "Error opening file!" << endl;
         return;
     }
     //column headers
@@ -64,7 +64,7 @@ void save_vectors_CSV(const vector<double>& col1, const std::string& filename) {
         file << col1[i] << "\n";
     }
     file.close(); 
-    std::cout << "Data saved to " << filename << std::endl;
+    cout << "Data saved to " << filename << endl;
 }
 
 int main (void){

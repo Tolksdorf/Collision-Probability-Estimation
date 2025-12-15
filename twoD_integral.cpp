@@ -67,7 +67,7 @@ casadi::Function POCFunction::_twoD_integral(){
         poc_value = _trapezoidal_2Dintegral(p_vector);
     } else if (_paras.integral_method == 2) {
         poc_value = _Simpson_2Dintegral(p_vector);
-    } else{cout << "Incorrect integration method selected. Set either integral_method == 1 for trapezoidal or integration_method == 2 for Simpson." << endl;}
+    } else{throw invalid_argument("incorrect integration method selected. Set either integral_method = 1 for trapezoidal or integration_method = 2 for Simpson");}
 
     poc_value *= 1/(4 * M_PI * sigma_x * sigma_y);
     poc_value = cse(poc_value); //simplyfies symbolic exspressions
