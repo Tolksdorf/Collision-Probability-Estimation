@@ -45,7 +45,7 @@ class POCFunction
 
         //define functions        
         void _collision_angle_intervals(Eigen::VectorXd* r, Eigen::VectorXd* phi);
-        void _get_distances(double L_e, double L_o, int n_cir_e, int n_cir_o, std::vector<double>* dists_e, std::vector<double>* dists_o);
+        void _get_distances(std::vector<double>* dists_e, std::vector<double>* dists_o);
         void _sort_intervals();
         void _int_unions(const Eigen::MatrixXd* Int1, const Eigen::MatrixXd* Int2, Eigen::MatrixXd *Int1_new, Eigen::MatrixXd *Int2_new);
 

@@ -36,7 +36,7 @@ void POCFunction::_collision_angle_intervals(VectorXd* r, VectorXd* phi){
     } else {
         n_it = (_paras.N_co + 1)/2;
     }
-    _get_distances(_paras.d_ce, _paras.d_co, _paras.N_ce, _paras.N_co, &dists_e, &dists_o);
+    _get_distances(&dists_e, &dists_o);
     #if DEBUG
         cout << "dists_e: " << dists_e << endl;
         cout << "dists_o: " << dists_o << endl;

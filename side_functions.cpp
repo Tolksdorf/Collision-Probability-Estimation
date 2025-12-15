@@ -96,36 +96,19 @@ SX POCFunction::_Simpson_2Dintegral(SX vector){
     return integral_value * _h_phi / 3.0;
 }
 
-void POCFunction::_get_distances(double d_ce, double d_co, int N_ce, int N_co, std::vector<double>* dists_e, std::vector<double>* dists_o) {
-	
-    (*dists_o).resize(N_co, 0.0);  //object distances of each circle of the center in local coordinates
-    (*dists_e).resize(N_ce, 0.0);  //ego distances of each circle of the center in local coordinates
+static vector<double> symmetric_dists(int N, double d)
+{
+    vector<double> dist(N);
+    const double center = (N - 1) / 2.0;
 
-    //calculate ego distances
-    if (N_ce % 2 == 0) {  //if even
-        for (int i_ee = 0; i_ee < N_ce / 2; ++i_ee) {
-            (*dists_e)[i_ee] = -(d_ce / 2.0 + (N_ce / 2.0 - i_ee - 1.0) * d_ce);
-            (*dists_e)[N_ce - 1 - i_ee] = d_ce / 2.0 + (N_ce / 2.0 - i_ee - 1.0) * d_ce;
-        }
+    for (int i = 0; i < N; ++i) {
+        dist[i] = (i - center) * d;
     }
-    else {  //if odd
-        for (int i_ee = 0; i_ee < (N_ce - 1) / 2; ++i_ee) {
-            (*dists_e)[i_ee] = -(d_ce + ((N_ce - 1.0) / 2.0 - i_ee - 1.0) * d_ce);
-            (*dists_e)[N_ce - 1 - i_ee] = d_ce + ((N_ce - 1.0) / 2.0 - i_ee - 1.0) * d_ce;
-        }
-    }
+    return dist;
+}
 
-    //calculate object distances
-    if (N_co % 2 == 0) {  //if even
-        for (int i_oo = 0; i_oo < N_co / 2; ++i_oo) {
-            (*dists_o)[i_oo] = -(d_co / 2.0 + (N_co / 2.0 - i_oo - 1.0) * d_co);
-            (*dists_o)[N_co - 1 - i_oo] = d_co / 2.0 + (N_co / 2.0 - i_oo - 1.0) * d_co;
-        }
-    }
-    else {  //if odd
-        for (int i_oo = 0; i_oo < (N_co - 1) / 2; ++i_oo) {
-            (*dists_o)[i_oo] = -(d_co + ((N_co - 1.0) / 2.0 - i_oo - 1.0) * d_co);
-            (*dists_o)[N_co - 1 - i_oo] = d_co + ((N_co - 1.0) / 2.0 - i_oo - 1.0) * d_co;
-        }
-    }
+void POCFunction::_get_distances(vector<double>* dists_e, vector<double>* dists_o)
+{
+    *dists_e = symmetric_dists(_paras.N_ce, _paras.d_ce);
+    *dists_o = symmetric_dists(_paras.N_co, _paras.d_co);
 }
